@@ -3,10 +3,12 @@ class Ball {
   int cx, cy;
   int xvelocity, yvelocity;
   int radius;
+  color c;
 
   //constructor
   Ball() {
     radius = 20;
+    c = SAFE_COLOR;
     reset();
   }//default constructor
 
@@ -17,7 +19,25 @@ class Ball {
     cy = int(random(radius, height-radius));
   }//resetBall
 
+  void setColor(color newc){
+    c = newc;  
+  }
+  
+  boolean collisionCheck(Ball other){
+    if(sqrt((cx - other.cx)*(cx - other.cx) + (cy - other.cy)*(cy - other.cy)) < radius*2 && equals(other) == false){
+      return true;
+    }
+    return false;
+  }
+  
   void display() {
+    setColor(SAFE_COLOR);
+     for (int i=0; i<balls.length; i++) {
+      if(collisionCheck(balls[i]) == true){
+       setColor(COLLISION_COLOR); 
+      }
+    }
+    fill(c);
     circle(cx, cy, radius * 2);
   }//display
 
@@ -31,7 +51,7 @@ class Ball {
     cx+= xvelocity;
     cy+= yvelocity;
   }//moveBall
-  
+
   void changeSpeed(int x, int y) {
     xvelocity+= x;
     yvelocity+= y;
@@ -41,10 +61,10 @@ class Ball {
     float d = dist(x, y, cx, cy);
     return d <= radius;
   }//onBall
-  
+
   int getScoreValue() {
-    int score = abs(xvelocity) + abs(yvelocity); 
+    int score = abs(xvelocity) + abs(yvelocity);
     return score;
   }//getScoreValue
-  
+
 }//Ball
